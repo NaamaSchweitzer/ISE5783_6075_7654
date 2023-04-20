@@ -3,26 +3,41 @@ package primitives;
 import java.util.Objects;
 
 public class Ray {
-	private Point p0 ;
-	private Vector dir;
-	
+	final private Point p0; // Private field for the starting point of the ray
+	final private Vector dir; // Private field for the direction of the ray
+
 	/**
-	 * 
+	 * Constructor that takes a Point object for the starting point of the ray and a
+	 * Vector object for the direction of the ray The direction vector is normalized
+	 * to ensure it has unit length
 	 */
 	public Ray(Point p, Vector vec) {
-		dir = vec.normalize();
-		p0 = p;
+		dir = vec.normalize(); // normalize the direction vector
+		p0 = p; // set the starting point of the ray
 	}
 
+	/**
+	 * Override of the toString() method to return a string representation of the
+	 * Ray object
+	 */
 	@Override
 	public String toString() {
 		return "Ray [p0=" + p0 + ", dir=" + dir + "]";
 	}
 
+	/**
+	 * Override of the hashCode() method to provide a hash code for a Ray object
+	 * based on its p0 and dir fields
+	 */
 	@Override
 	public int hashCode() {
 		return Objects.hash(dir, p0);
 	}
+
+	/**
+	 * Override of the equals() method to compare two Ray objects for equality based
+	 * on their p0 and dir fields
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -34,5 +49,12 @@ public class Ray {
 		Ray other = (Ray) obj;
 		return Objects.equals(dir, other.dir) && Objects.equals(p0, other.p0);
 	}
-	
+
+	public Point getP0() {
+		return p0;
+	}
+
+	public Vector getDir() {
+		return dir;
+	}
 }

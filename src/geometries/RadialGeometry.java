@@ -1,13 +1,9 @@
 package geometries;
 
-import primitives.Point;
-import primitives.Vector;
+public abstract class RadialGeometry implements Geometry {
 
-public class RadialGeometry implements Geometry {
+	final protected double radius;
 
-
-	protected double radius;
-	
 	/**
 	 * @param radius
 	 */
@@ -19,9 +15,4 @@ public class RadialGeometry implements Geometry {
 		return radius;
 	}
 
-	@Override
-	public Vector getNormal(Point p) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
