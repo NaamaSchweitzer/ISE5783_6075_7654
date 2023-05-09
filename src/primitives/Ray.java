@@ -57,4 +57,14 @@ public class Ray {
 	public Vector getDir() {
 		return dir;
 	}
+	
+	/**
+	 * 
+	 * @param t
+	 * @return If t is 0 the function returns p0 otherwise returns a new point which is P0 + vector direction * scalar 
+	 */
+	public Point getPoint(double t) {
+		Point p = p0.add(dir.scale(t));
+		return Util.isZero(t) ? p0 : p;
+	}
 }

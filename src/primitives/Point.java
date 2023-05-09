@@ -2,6 +2,11 @@ package primitives;
 
 import java.util.Objects;
 
+/**
+ * 
+ * @author Hadas Carmen & Naama Schweitzer
+ *
+ */
 public class Point {
 
 	final Double3 xyz; // Private field for the X, Y, and Z values of the 3 damentional point
@@ -18,6 +23,33 @@ public class Point {
 	 */
 	Point(Double3 x) {
 		xyz = x;
+	}
+
+	/**
+	 * get the x value of the point
+	 * 
+	 * @return x coordinate value
+	 */
+	public double getX() {
+		return xyz.d1;
+	}
+
+	/**
+	 * get the y value of the point
+	 * 
+	 * @return y coordinate value
+	 */
+	public double getY() {
+		return xyz.d2;
+	}
+
+	/**
+	 * get the z value of the point
+	 * 
+	 * @return z coordinate value
+	 */
+	public double getZ() {
+		return xyz.d3;
 	}
 
 	/**
@@ -80,12 +112,12 @@ public class Point {
 
 	/**
 	 * Method to compute the squared distance between the current point and another
-	 * Point object according to squared distance method: 
-	 * distance^2 = (x1-x2)^2 + (y1-y2)^2 + (z1-z2)^2
+	 * Point object according to squared distance method: distance^2 = (x1-x2)^2 +
+	 * (y1-y2)^2 + (z1-z2)^2
 	 */
 	public Double distanceSquared(Point p) {
-		return (xyz.d1 - p.xyz.d1) * (xyz.d1 - p.xyz.d1)  // (x1-x2)^2
-				+ (xyz.d2 - p.xyz.d2) * (xyz.d2 - p.xyz.d2)  // (y1-y2)^2
-				+ (xyz.d3 - p.xyz.d3) * (xyz.d3 - p.xyz.d3);  // (z1-z2)^2
+		return (xyz.d1 - p.xyz.d1) * (xyz.d1 - p.xyz.d1) // (x1-x2)^2
+				+ (xyz.d2 - p.xyz.d2) * (xyz.d2 - p.xyz.d2) // (y1-y2)^2
+				+ (xyz.d3 - p.xyz.d3) * (xyz.d3 - p.xyz.d3); // (z1-z2)^2
 	}
 }

@@ -1,5 +1,7 @@
 package geometries;
 
+import java.util.List;
+
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
@@ -33,6 +35,12 @@ public class Tube extends RadialGeometry {
 			O = O.add(axisRay.getDir().scale(t)); // Calculate the closest point on the central ray to the given point
 		}
 		return p.subtract(O).normalize(); // Calculate and return the normal vector at the given point on the tube
+	}
+
+	@Override
+	public List<Point> findIntersections(Ray ray) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

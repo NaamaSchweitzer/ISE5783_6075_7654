@@ -8,7 +8,7 @@ import primitives.Point;
  * object in three-dimensional space. It defines a method for getting the normal
  * vector at a given point on the geometry.
  */
-public interface Geometry {
+public interface Geometry extends Intersectable {
 
 	/**
 	 * Calculates and returns the normal vector at a given point on the geometry.
