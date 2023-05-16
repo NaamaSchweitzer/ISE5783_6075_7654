@@ -41,7 +41,7 @@ public class Sphere extends RadialGeometry {
 		double tm = v.dotProduct(u); // the scale for the ray in order to get parallel to the sphere center
 		double d = Math.sqrt(u.lengthSquared() - tm * tm);// get the distance between the ray and the sphere center
 		// check if d is bigger then radius-the ray doesn't cross the sphere
-		if (d > radius)
+		if (d >= radius)
 			return null;
 		double th = Math.sqrt(radius * radius - d * d);// according pitagoras
 		double t1 = tm + th;
