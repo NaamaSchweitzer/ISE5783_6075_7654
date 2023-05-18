@@ -11,6 +11,9 @@ public class Point {
 
 	final Double3 xyz; // Private field for the X, Y, and Z values of the 3 damentional point
 
+	/** Zero triad (0,0,0) */
+	public static final Point ZERO = new Point(0, 0, 0);
+
 	/**
 	 * Constructor that gets three double values for the X, Y, and Z
 	 */

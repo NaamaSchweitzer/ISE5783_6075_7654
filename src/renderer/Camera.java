@@ -1,9 +1,12 @@
 package renderer;
 
+import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 import static primitives.Util.isZero;
+
+import java.util.MissingResourceException;
 
 public class Camera {
 
@@ -16,6 +19,8 @@ public class Camera {
 	private double width;
 	private double height;
 	private double distance;
+	private ImageWriter imageWriter;
+	private RayTracerBase rayTracerBase;
 
 	/**
 	 * 
@@ -125,6 +130,28 @@ public class Camera {
 	}
 
 	/**
+	 * Image writer setter and return the camera
+	 * 
+	 * @param imageWriter - the image writer
+	 * @return the camera after set the image writer
+	 */
+	public Camera setImageWriter(ImageWriter imageWriter) {
+		this.imageWriter = imageWriter;
+		return this;
+	}
+
+	/**
+	 * Ray tracer setter and return the camera
+	 * 
+	 * @param rayTracerBase - the ray tracer
+	 * @return the camera after set the ray tracer
+	 */
+	public Camera setRayTracer(RayTracerBase rayTracerBase) {
+		this.rayTracerBase = rayTracerBase;
+		return this;
+	}
+
+	/**
 	 * This function return a ray from the camera to the point (x,y) on the view
 	 * plane
 	 * 
@@ -167,6 +194,86 @@ public class Camera {
 		Vector Vij = Pij.subtract(this.p0);
 
 		return new Ray(this.p0, Vij);
+	}
+
+	/**
+	 * This function checks if all the parameters are valid for the camera
+	 */
+	public void renderImage() {
+		if (p0 == null)
+			throw new MissingResourceException("ERROR: The camera position is null", "Camera", "p0");
+		if (vUp == null)
+			throw new MissingResourceException("ERROR: The camera up direction is null", "Camera", "vUp");
+		if (vTo == null)
+			throw new MissingResourceException("ERROR: The camera towards direction is null", "Camera", "vTo");
+		if (vRight == null)
+			throw new MissingResourceException("ERROR: The camera right direction is null", "Camera", "vRight");
+		if (width == 0)
+			throw new MissingResourceException("ERROR: The width of the image is zero", "Camera", "width");
+		if (height == 0)
+			throw new MissingResourceException("ERROR: The height of the image is zero", "Camera", "height");
+		if (distance == 0)
+			throw new MissingResourceException("ERROR: The distance from the camera to the image plane is zero",
+					"Camera", "distance");
+		if (imageWriter == null)
+			throw new MissingResourceException("ERROR: The image writer is null", "Camera", "imageWriter");
+		if (rayTracerBase == null)
+			throw new MissingResourceException("ERROR: The ray tracer base is null", "Camera", "rayTracerBase");
+
+		int ny = imageWriter.getNy();
+		int nx = imageWriter.getNx();
+		for (int i = 0; i < ny; i++)
+			for (int j = 0; j < nx; j++) {
+				Color color = this.castRay(nx, ny, j, i);
+				imageWriter.writePixel(j, i, color);
+			}
+		;
+	}
+
+	/**
+	 * Create grid of lines to draw the view plane
+	 * 
+	 * @param interval - the interval between the lines
+	 * @param color    - the color of the lines
+	 * @throws MissingResourceException - if the image writer is null
+	 */
+	public void printGrid(int interval, Color color) {
+		if (imageWriter == null)
+			throw new MissingResourceException("ERROR: The image writer is null", "Camera", "imageWriter");
+
+		int ny = imageWriter.getNy();
+		int nx = imageWriter.getNx();
+		for (int i = 0; i < ny; i++)
+			for (int j = 0; j < nx; j++)
+				if (i % interval == 0 || j % interval == 0)
+					imageWriter.writePixel(j, i, color);
+
+	}
+
+	/**
+	 * Activates the appropriate image maker's method
+	 */
+	public void writeToImage() {
+		if (imageWriter == null)
+			throw new MissingResourceException("ERROR: The image writer is null", "Camera", "imageWriter");
+
+		imageWriter.writeToImage();
+	}
+
+	/**
+	 * Cast ray from camera in order to color a pixel
+	 * 
+	 * @param nX  resolution on X axis (number of pixels in row)
+	 * @param nY  resolution on Y axis (number of pixels in column)
+	 * @param col pixel's column number (pixel index in row)
+	 * @param row pixel's row number (pixel index in column)
+	 */
+	private Color castRay(int nX, int nY, int col, int row) {
+		Ray ray = this.constructRay(nX, nY, col, row);
+		Color color = Color.BLACK;
+		color = color.add(this.rayTracerBase.traceRay(ray));
+
+		return color;
 	}
 
 }

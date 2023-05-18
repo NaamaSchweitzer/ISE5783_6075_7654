@@ -4,13 +4,9 @@
 package unittests.geometries;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static primitives.Util.isZero;
-
 import org.junit.jupiter.api.Test;
 
 import geometries.Plane;
-import geometries.Polygon;
-import geometries.Sphere;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;

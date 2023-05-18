@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import geometries.Polygon;
 import geometries.Triangle;
 import primitives.Point;
 import primitives.Ray;

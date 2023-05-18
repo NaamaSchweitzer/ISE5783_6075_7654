@@ -3,8 +3,6 @@
  */
 package unittests.renderer;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -22,15 +20,19 @@ import renderer.Camera;
  *
  */
 class IntegrationTests {
-	static final Point ZERO_POINT = new Point(0, 0, 0);
+	static final private Point ZERO_POINT = new Point(0, 0, 0);
+	// set vriables for height/width of view plane:
+	static final private int H = 3;
+	static final int W = 3;
 
-	public void cameraIntegrations(Geometry geo, Camera camera, int expected, String testCase) {
+	private void cameraIntegrations(Geometry geo, Camera camera, int expected, String testCase) {
 		List<Point> intersectionPoints;
+
 		int intersections = 0;
 		// run on view plane - 3X3 size in pixels
-		for (int i = 0; i < 3; ++i) {
-			for (int j = 0; j < 3; ++j) {
-				intersectionPoints = geo.findIntersections(camera.constructRay(3, 3, j, i));
+		for (int i = 0; i < W; ++i) {
+			for (int j = 0; j < H; ++j) {
+				intersectionPoints = geo.findIntersections(camera.constructRay(H, W, j, i));
 				if (intersectionPoints != null)
 					intersections += intersectionPoints.size();
 			}
@@ -45,10 +47,10 @@ class IntegrationTests {
 	@Test
 	public void SphereIntegration() {
 
-		Camera camera = new Camera(ZERO_POINT, new Vector(0, 0, -1), new Vector(0, -1, 0)).setVPDistance(1).setVPSize(3,
-				3);
+		Camera camera = new Camera(ZERO_POINT, new Vector(0, 0, -1), new Vector(0, -1, 0)).setVPDistance(1).setVPSize(H,
+				W);
 		Camera camera2 = new Camera(new Point(0, 0, 0.5), new Vector(0, 0, -1), new Vector(0, -1, 0)).setVPDistance(1)
-				.setVPSize(3, 3);
+				.setVPSize(H, W);
 
 		// TC01: 2 intersection points
 		cameraIntegrations(new Sphere(1, new Point(0, 0, -3)), camera, 2, "TC01");
@@ -76,8 +78,8 @@ class IntegrationTests {
 	 */
 	@Test
 	public void PlaneIntegration() {
-		Camera camera = new Camera(ZERO_POINT, new Vector(0, 0, 1), new Vector(0, -1, 0)).setVPDistance(1).setVPSize(3,
-				3);
+		Camera camera = new Camera(ZERO_POINT, new Vector(0, 0, 1), new Vector(0, -1, 0)).setVPDistance(1).setVPSize(H,
+				W);
 		// Tc01: 9 intersection points- plane against camera
 		cameraIntegrations(new Plane(new Point(0, 0, 5), new Vector(0, 0, 1)), camera, 9, "TC01");
 
@@ -95,8 +97,8 @@ class IntegrationTests {
 	 */
 	@Test
 	public void TriangleIntegration() {
-		Camera camera = new Camera(ZERO_POINT, new Vector(0, 0, -1), new Vector(0, -1, 0)).setVPDistance(1).setVPSize(3,
-				3);
+		Camera camera = new Camera(ZERO_POINT, new Vector(0, 0, -1), new Vector(0, -1, 0)).setVPDistance(1).setVPSize(H,
+				W);
 		// TC01: 1 intersection point- small triangle
 		cameraIntegrations(new Triangle(new Point(0, 1, -2), new Point(1, -1, -2), new Point(-1, -1, -2)), camera, 1,
 				"TC01");

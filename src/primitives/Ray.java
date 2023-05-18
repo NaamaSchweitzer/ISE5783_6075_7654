@@ -1,5 +1,6 @@
 package primitives;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Ray {
@@ -57,14 +58,40 @@ public class Ray {
 	public Vector getDir() {
 		return dir;
 	}
-	
+
 	/**
 	 * 
 	 * @param t
-	 * @return If t is 0 the function returns p0 otherwise returns a new point which is P0 + vector direction * scalar 
+	 * @return If t is 0 the function returns p0 otherwise returns a new point which
+	 *         is P0 + vector direction * scalar
 	 */
 	public Point getPoint(double t) {
 		Point p = p0.add(dir.scale(t));
 		return Util.isZero(t) ? p0 : p;
+	}
+
+	/**
+	 * In the points list - find the point with minimal distance from the ray head
+	 * point and return it
+	 * 
+	 * @param pointList list of intersection point
+	 * @return the closet point to ray point (p0)
+	 */
+	public Point findClosestPoint(List<Point> pointList) {
+		if (pointList == null)// if the list is empty
+			return null;
+
+		Point closestPoint = pointList.get(0); // begin with the first point
+		double min = p0.distance(pointList.get(0)); // find the distance between the point
+
+		for (int i = 0; i < pointList.size(); i++) // run on the list
+		{
+			if (p0.distance(pointList.get(i)) < min) // if there is a closer point update
+			{
+				min = p0.distance(pointList.get(i));
+				closestPoint = pointList.get(i);
+			}
+		}
+		return closestPoint;
 	}
 }

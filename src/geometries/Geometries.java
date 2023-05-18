@@ -1,7 +1,5 @@
 package geometries;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,8 +46,8 @@ public class Geometries implements Intersectable {
 
 		for (Intersectable geo : geometries) { // run on list of geometries
 			List<Point> otherIntersections = geo.findIntersections(ray); // find intersections of each geometry
-			if (!otherIntersections.isEmpty()) {
-				if (intersections.isEmpty()) // if no intersections were inserted yet
+			if (otherIntersections != null) {
+				if (intersections == null) // if no intersections were inserted yet
 					intersections = new LinkedList<>(); // create a new LinkedList
 				intersections.addAll(otherIntersections); // insert all intersections
 			}
