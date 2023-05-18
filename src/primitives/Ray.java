@@ -78,7 +78,7 @@ public class Ray {
 	 * @return the closet point to ray point (p0)
 	 */
 	public Point findClosestPoint(List<Point> pointList) {
-		if (pointList == null)// if the list is empty
+		if (pointList == null || pointList.isEmpty())// if the list is empty
 			return null;
 
 		Point closestPoint = pointList.get(0); // begin with the first point
