@@ -8,7 +8,7 @@ import primitives.Ray;
 /**
  * This class served all geometries for trace rays and find intersections
  * 
- * @author Hadas Carmen & Naama Schweitzer
+ * @author Hadas Carmen &amp; Naama Schweitzer
  */
 public interface Intersectable {
 	

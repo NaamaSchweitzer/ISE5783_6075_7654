@@ -36,7 +36,7 @@ public final class Main {
       if (!isZero(new Vector(0, 3, 4).length() - 5))
          out.println("ERROR: length() wrong value");
 
-      // Test add & subtract
+      // Test add &amp; subtract
       try {
          v1.add(new Vector(-1, -2, -3));
          out.println("ERROR: Vector + -itself does not throw an exception");

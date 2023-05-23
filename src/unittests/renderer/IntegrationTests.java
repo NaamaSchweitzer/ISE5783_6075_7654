@@ -16,7 +16,7 @@ import primitives.Vector;
 import renderer.Camera;
 
 /**
- * @author Hadas Carmen & Naama Schweitzer
+ * @author Hadas Carmen &amp; Naama Schweitzer
  *
  */
 class IntegrationTests {
