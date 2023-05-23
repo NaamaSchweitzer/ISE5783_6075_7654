@@ -12,10 +12,10 @@ public class Camera {
 
 	// private fields
 
-	private Point p0;
-	private Vector vTo;
-	private Vector vUp;
-	private Vector vRight;
+	private final Point p0;
+	private final Vector vTo;
+	private final Vector vUp;
+	private final Vector vRight;
 	private double width;
 	private double height;
 	private double distance;
@@ -33,16 +33,21 @@ public class Camera {
 	 */
 	public Camera(Point p0, Vector vTo, Vector vUp) {
 
-		if (!isZero(vUp.dotProduct(vTo))) {
+		if (!isZero(vUp.dotProduct(vTo)))
 			throw (new IllegalArgumentException("ERROR: The vectors must be vertical"));
+<<<<<<< HEAD
 		}
+=======
+
+		this.vRight = vTo.crossProduct(vUp).normalize();
+>>>>>>> branch 'master' of https://github.com/NaamaSchweitzer/ISE5783_6075_7654.git
 		this.p0 = p0;
 		this.vUp = vUp.normalize();
 		this.vTo = vTo.normalize();
 		this.vRight = vTo.crossProduct(vUp).normalize();
 	}
 
-	// setters for fields
+	// getters for fields
 
 	/**
 	 * @return the p0
@@ -158,7 +163,7 @@ public class Camera {
 		}
 		Point pc = this.p0.add(vTo.scale((distance))); // p0 + d*vto
 
-		// Ratio (pixel width & height)
+		// Ratio (pixel width &amp; height)
 		if (isZero(nY)) {
 			throw new IllegalArgumentException("can not divide in 0");
 		}

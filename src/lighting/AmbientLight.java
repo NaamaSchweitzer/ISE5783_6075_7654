@@ -5,7 +5,7 @@ import primitives.Double3;
 
 /**
  * 
- * @author Hadas & Naama
+ * @author Hadas &amp; Naama
  *
  */
 public class AmbientLight {
@@ -22,7 +22,6 @@ public class AmbientLight {
 	 * @param kA - the attenuation factor of the original light
 	 */
 	public AmbientLight(Color iA, Double3 kA) {
-		super();
 		intensity = iA.scale(kA);// iP = kA*iA
 	}
 

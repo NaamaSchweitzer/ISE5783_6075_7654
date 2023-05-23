@@ -16,7 +16,7 @@ import primitives.Ray;
 import primitives.Vector;
 
 /**
- * @author Hadas Carmen & Naama Schweitzer
+ * @author Hadas Carmen &amp; Naama Schweitzer
  *
  */
 class TriangleTest {

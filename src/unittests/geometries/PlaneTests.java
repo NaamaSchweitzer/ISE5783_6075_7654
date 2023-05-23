@@ -14,7 +14,7 @@ import primitives.Vector;
 /**
  * Testing Planes
  * 
- * @author Hadas Carmen & Naama Schweitzer
+ * @author Hadas Carmen &amp; Naama Schweitzer
  *
  */
 class PlaneTests {
@@ -33,16 +33,16 @@ class PlaneTests {
 
 		// =============== Boundary Values Tests ==================
 
-		// TC02: First & second points are merged
+		// TC02: First &amp; second points are merged
 		assertThrows(IllegalArgumentException.class, //
 				() -> {
 					new Plane(new Point(2, 1, 0), new Point(2, 1, 0), new Point(7, 1, 3));
-				}, "ERROR: first & second points are merged");
+				}, "ERROR: first &amp; second points are merged");
 
-		// TC03: first & second points are on the same line
+		// TC03: first &amp; second points are on the same line
 		assertThrows(IllegalArgumentException.class, //
 				() -> new Plane(new Point(2, 1, 0), new Point(5, 0, 3), new Point(3.5, 0.5, 1.5)),
-				"ERROR: first & second points are on the same line");
+				"ERROR: first &amp; second points are on the same line");
 
 	}
 

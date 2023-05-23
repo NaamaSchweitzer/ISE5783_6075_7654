@@ -4,7 +4,7 @@ import java.util.Objects;
 
 /**
  * 
- * @author Hadas Carmen & Naama Schweitzer
+ * @author Hadas Carmen &amp; Naama Schweitzer
  *
  */
 public class Point {
