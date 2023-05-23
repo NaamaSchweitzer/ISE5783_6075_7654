@@ -31,25 +31,15 @@ public class Camera {
 	 * @param vTo
 	 * @param vUp
 	 */
-	/*
-	 * public Camera(Point p0, Vector vTo, Vector vUp) { if
-	 * (!isZero(vTo.dotProduct(vUp))) throw new
-	 * IllegalArgumentException("Error, cannot create Camera, vUp and vTo are not vertical"
-	 * ); this.p0 = p0; this.vTo = vTo.normalize(); this.vUp = vUp.normalize();
-	 * this.vRight = (vTo.crossProduct(vUp)).normalize();
-	 * 
-	 * }
-	 */
-
 	public Camera(Point p0, Vector vTo, Vector vUp) {
 
 		if (!isZero(vUp.dotProduct(vTo))) {
 			throw (new IllegalArgumentException("ERROR: The vectors must be vertical"));
 		}
-		this.vRight = vTo.crossProduct(vUp).normalize();
 		this.p0 = p0;
 		this.vUp = vUp.normalize();
 		this.vTo = vTo.normalize();
+		this.vRight = vTo.crossProduct(vUp).normalize();
 	}
 
 	// setters for fields
@@ -166,7 +156,7 @@ public class Camera {
 		if (isZero(distance)) {
 			throw new IllegalArgumentException("distance can not be 0");
 		}
-		Point pc = this.p0.add(this.vTo.scale((this.distance))); // p0 + d*vto
+		Point pc = this.p0.add(vTo.scale((distance))); // p0 + d*vto
 
 		// Ratio (pixel width & height)
 		if (isZero(nY)) {
@@ -179,8 +169,8 @@ public class Camera {
 		double Rx = this.width / nX;
 
 		// Pixel[i,j] center
-		double yi = -(i - (nY - 1) / 2d) * Ry;
-		double xj = (j - (nX - 1) / 2d) * Rx;
+		double yi = -1 * (i - ((nY - 1) / 2d)) * Ry;
+		double xj = (j - ((nX - 1) / 2d)) * Rx;
 
 		Point Pij = pc;
 
@@ -270,8 +260,7 @@ public class Camera {
 	 */
 	private Color castRay(int nX, int nY, int col, int row) {
 		Ray ray = this.constructRay(nX, nY, col, row);
-		Color color = Color.BLACK;
-		color = color.add(this.rayTracerBase.traceRay(ray));
+		Color color = this.rayTracerBase.traceRay(ray);
 
 		return color;
 	}

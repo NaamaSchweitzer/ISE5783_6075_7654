@@ -6,7 +6,7 @@ import java.util.List;
 import primitives.Point;
 import primitives.Ray;
 
-public class Geometries implements Intersectable {
+public class Geometries extends Intersectable {
 
 	/**
 	 * A container for Geometries (Intersectables)
@@ -15,12 +15,12 @@ public class Geometries implements Intersectable {
 
 	/* ********* Constructors *********** */
 	/**
-	 * Constructor
+	 * Constructor with list of geometries
 	 * 
 	 * @param geometries return a list of geometries
 	 **/
 	public Geometries(Intersectable... geos) {
-		Collections.addAll(this.geometries, geos); // add new geometries to the end of list
+		add(geos); // add new geometries to the end of list
 	}
 
 	/**
@@ -40,17 +40,25 @@ public class Geometries implements Intersectable {
 		Collections.addAll(this.geometries, geos); // add the new geometries to list
 	}
 
+	/**
+	 * This function returns all the {@link GeoPoint} intersection points with a ray
+	 * and the geometries in the bundle
+	 * 
+	 * @param ray - that may has intersection points with the geometries
+	 * @return list of the intersection points
+	 */
 	@Override
-	public List<Point> findIntersections(Ray ray) {
-		List<Point> intersections = null;
+	protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+		List<GeoPoint> intersections = null;
 
 		for (Intersectable geo : geometries) { // run on list of geometries
-			List<Point> otherIntersections = geo.findIntersections(ray); // find intersections of each geometry
-			if (otherIntersections != null) {
+			List<GeoPoint> otherIntersections = geo.findGeoIntersections(ray); // find intersections of each geometry
+			if (otherIntersections != null)
 				if (intersections == null) // if no intersections were inserted yet
 					intersections = new LinkedList<>(); // create a new LinkedList
-				intersections.addAll(otherIntersections); // insert all intersections
-			}
+				else
+					intersections.addAll(otherIntersections); // insert all intersections
+
 		}
 		return intersections; // return the list of intersections
 	}

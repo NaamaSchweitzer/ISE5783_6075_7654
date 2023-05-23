@@ -23,6 +23,11 @@ public class Tube extends RadialGeometry {
 		return axisRay;
 	}
 
+	/**
+	 * This function returns the normal vector of the tube
+	 * 
+	 * @param p point that may has normal vector of the tube
+	 */
 	@Override
 	public Vector getNormal(Point p) {
 		if (p.equals(axisRay.getP0()))
@@ -37,8 +42,14 @@ public class Tube extends RadialGeometry {
 		return p.subtract(O).normalize(); // Calculate and return the normal vector at the given point on the tube
 	}
 
+	/**
+	 * This function returns all intersections {@link GeoPoint} between a ray and
+	 * the tube
+	 * 
+	 * @param ray that may has intersection with the tube
+	 */
 	@Override
-	public List<Point> findIntersections(Ray ray) {
+	public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -22,12 +22,16 @@ public class Triangle extends Polygon {
 	}
 
 	/**
-	 * The function returns intersections between a ray and a triangle. If there are
-	 * no intersection points the function returns null
+	 * return a list of intersections between triangle and ray find intersections
+	 * using barycentric method I is the traced point on the ray if (0 < a, b < 1)
+	 * => I is inside the triangle
+	 * 
+	 * @param ray - ray that may has intersection with the triangle
+	 * @return list of intersection points
 	 */
 	@Override
-	public List<Point> findIntersections(Ray ray) {
-		List<Point> intersections = plane.findIntersections(ray);
+	public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+		List<GeoPoint> intersections = plane.findGeoIntersections(ray);
 		if (intersections == null)
 			return null;
 
@@ -42,17 +46,18 @@ public class Triangle extends Polygon {
 		Vector n2 = v2.crossProduct(v3).normalize();
 		Vector n3 = v3.crossProduct(v1).normalize();
 		double vN1 = rayVector.dotProduct(n1); // rayVector*n1
-		double vN2 = rayVector.dotProduct(n2);// rayVector*n2
-		double vN3 = rayVector.dotProduct(n3);// rayVector*n3
+		double vN2 = rayVector.dotProduct(n2); // rayVector*n2
+		double vN3 = rayVector.dotProduct(n3); // rayVector*n3
 		// check if all vNi are not zero
 		if (isZero(vN1) || isZero(vN2) || isZero(vN3))
 			return null;
 		// check if all vNi have a same sign(-/+)
 		if ((vN1 > 0 && vN2 > 0 && vN3 > 0) || (vN1 < 0 && vN2 < 0 && vN3 < 0)) {
+			for (GeoPoint geo : intersections)
+				geo.geometry = this;
 			return intersections;
-		} else {
+		} else
 			return null;
-		}
 
 	}
 

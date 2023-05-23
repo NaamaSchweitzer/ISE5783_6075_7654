@@ -29,14 +29,20 @@ public class Sphere extends RadialGeometry {
 												// sphere
 	}
 
+	/**
+	 * @param Ray ray - the ray that intersect the plane
+	 * @return List<GeoPoint> - the list of intersection GeoPoints
+	 */
 	@Override
-	public List<Point> findIntersections(Ray ray) {
+	public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
 		// point and vector of ray
 		Point p0 = ray.getP0();// ray point
 		Vector v = ray.getDir();// ray vector
+
 		// check if ray point is the center
 		if (p0.equals(center)) //
-			return List.of(ray.getPoint(radius));
+			return List.of(new GeoPoint(this, ray.getPoint(radius)));
+
 		Vector u = center.subtract(p0);// the vector between center and ray
 		double tm = v.dotProduct(u); // the scale for the ray in order to get parallel to the sphere center
 		double d = Math.sqrt(u.lengthSquared() - tm * tm);// get the distance between the ray and the sphere center
@@ -48,13 +54,17 @@ public class Sphere extends RadialGeometry {
 		double t2 = tm - th;
 		if (t1 > 0 && t2 > 0 && !isZero(ray.getPoint(t1).subtract(center).dotProduct(v))
 				&& !isZero(ray.getPoint(t2).subtract(center).dotProduct(v))) // if orthogonal -> no intersection
-			return List.of(ray.getPoint(t1), ray.getPoint(t2));
+			// convert from list of Point to GeoPoint:
+			return List.of(new GeoPoint(this, ray.getPoint(t1)), new GeoPoint(this, ray.getPoint(t2)));
+
 		else if (t1 > 0 && !isZero(ray.getPoint(t1).subtract(center).dotProduct(v))) // if only t1 is not orthogonal and
 																						// positive
-			return List.of(ray.getPoint(t1));
+			// convert from list of Point to GeoPoint:
+			return List.of(new GeoPoint(this, ray.getPoint(t1)));
 		else if (t2 > 0 && !isZero(ray.getPoint(t2).subtract(center).dotProduct(v))) // if only t2 is not orthogonal and
 																						// positive
-			return List.of(ray.getPoint(t2));
+			// convert from list of Point to GeoPoint:
+			return List.of(new GeoPoint(this, ray.getPoint(t2)));
 		else
 			return null;
 	}

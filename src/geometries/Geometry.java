@@ -1,6 +1,7 @@
 package geometries;
 
 import primitives.Vector;
+import primitives.Color;
 import primitives.Point;
 
 /**
@@ -8,7 +9,9 @@ import primitives.Point;
  * object in three-dimensional space. It defines a method for getting the normal
  * vector at a given point on the geometry.
  */
-public interface Geometry extends Intersectable {
+public abstract class Geometry extends Intersectable {
+
+	protected Color emission = Color.BLACK;
 
 	/**
 	 * Calculates and returns the normal vector at a given point on the geometry.
@@ -16,5 +19,20 @@ public interface Geometry extends Intersectable {
 	 * @param p The point on the geometry to calculate the normal vector at
 	 * @return The normal vector at the given point on the geometry
 	 */
-	public Vector getNormal(Point p);
+	public abstract Vector getNormal(Point p);
+
+	/**
+	 * @return the emission
+	 */
+	public Color getEmission() {
+		return emission;
+	}
+
+	/**
+	 * @param emission the emission to set
+	 */
+	public Geometry setEmission(Color emission) {
+		this.emission = emission;
+		return this;
+	}
 }

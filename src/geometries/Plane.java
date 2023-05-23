@@ -6,7 +6,7 @@ import primitives.*;
 
 import static primitives.Util.*;
 
-public class Plane implements Geometry {
+public class Plane extends Geometry {
 
 	private final Point q0;
 	private final Vector normal; // The normal vector to the plane
@@ -49,9 +49,15 @@ public class Plane implements Geometry {
 		return normal; // The normal vector to the plane is constant for all points on the plane
 	}
 
+	/**
+	 * return a list of {@link GeoPoint} intersections between plane and ray
+	 * 
+	 * @param ray - that may has intersection with the plane
+	 * @return list of intersections
+	 */
 	@Override
-	public List<Point> findIntersections(Ray ray) {
-		// TODO Auto-generated method stub
+	public List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+
 		// get ray point and vector
 		Point rayPoint = ray.getP0();
 		Vector rayVector = ray.getDir();
@@ -59,18 +65,21 @@ public class Plane implements Geometry {
 		// check if the ray is parallel to the plane
 		if (isZero(normal.dotProduct(rayVector))) // dotProduct = 0 => parallel
 			return null;
+
 		// check if the ray and the plane start at the same point
 		if (ray.getP0().equals(q0))
 			return null;
 		try {
 
 			double t = alignZero((normal.dotProduct(q0.subtract(rayPoint))) / (normal.dotProduct(rayVector)));
+
 			// check if the ray starts on the plane
 			if (isZero(t))
 				return null;
 			// check if the ray crosses the plane
 			else if (t > 0)
-				return List.of(ray.getPoint(t));
+				return List.of(new GeoPoint(this, ray.getPoint(t))); // return list of GeoPint (convert from Point3D to
+																		// GeoPoint)
 			// no intersection between the ray and the plane
 			else
 				return null;
