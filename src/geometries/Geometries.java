@@ -11,7 +11,7 @@ public class Geometries extends Intersectable {
 	/**
 	 * A container for Geometries (Intersectables)
 	 **/
-	private List<Intersectable> geometries;
+	private final List<Intersectable> geometries = new LinkedList<>();
 
 	/* ********* Constructors *********** */
 	/**
@@ -29,7 +29,6 @@ public class Geometries extends Intersectable {
 	 * @param none
 	 */
 	public Geometries() {
-		this.geometries = new LinkedList<>();
 	}
 
 	/**
@@ -37,7 +36,7 @@ public class Geometries extends Intersectable {
 	 * @param geos
 	 */
 	public void add(Intersectable... geos) {
-		Collections.addAll(this.geometries, geos); // add the new geometries to list
+		this.geometries.addAll(List.of(geos)); // add the new geometries to list
 	}
 
 	/**
@@ -55,7 +54,7 @@ public class Geometries extends Intersectable {
 			List<GeoPoint> otherIntersections = geo.findGeoIntersections(ray); // find intersections of each geometry
 			if (otherIntersections != null)
 				if (intersections == null) // if no intersections were inserted yet
-					intersections = new LinkedList<>(); // create a new LinkedList
+					intersections = new LinkedList<>(otherIntersections); // create a new LinkedList
 				else
 					intersections.addAll(otherIntersections); // insert all intersections
 

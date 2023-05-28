@@ -212,8 +212,8 @@ public class Camera {
 
 		int ny = imageWriter.getNy();
 		int nx = imageWriter.getNx();
-		for (int i = 0; i < ny; i++)
-			for (int j = 0; j < nx; j++) {
+		for (int j = 0; j < nx; j++)
+			for (int i = 0; i < ny; i++) {
 				Color color = this.castRay(nx, ny, j, i);
 				imageWriter.writePixel(j, i, color);
 			}
@@ -233,8 +233,8 @@ public class Camera {
 
 		int ny = imageWriter.getNy();
 		int nx = imageWriter.getNx();
-		for (int i = 0; i < ny; i++)
-			for (int j = 0; j < nx; j++)
+		for (int j = 0; j < nx; j++)
+			for (int i = 0; i < ny; i++)
 				if (i % interval == 0 || j % interval == 0)
 					imageWriter.writePixel(j, i, color);
 

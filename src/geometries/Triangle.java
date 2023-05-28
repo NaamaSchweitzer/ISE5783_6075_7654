@@ -53,10 +53,10 @@ public class Triangle extends Polygon {
 			return null;
 		// check if all vNi have a same sign(-/+)
 		if ((vN1 > 0 && vN2 > 0 && vN3 > 0) || (vN1 < 0 && vN2 < 0 && vN3 < 0)) {
-			for (GeoPoint geo : intersections)
-				geo.geometry = this;
+			intersections.get(0).geometry = this;
 			return intersections;
-		} else
+		} 
+		else
 			return null;
 
 	}
