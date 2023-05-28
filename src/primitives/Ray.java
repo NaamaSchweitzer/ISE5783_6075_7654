@@ -28,14 +28,6 @@ public class Ray {
 		return "Ray [p0=" + p0 + ", dir=" + dir + "]";
 	}
 
-	/**
-	 * Override of the hashCode() method to provide a hash code for a Ray object
-	 * based on its p0 and dir fields
-	 */
-	@Override
-	public int hashCode() {
-		return Objects.hash(dir, p0);
-	}
 
 	/**
 	 * Override of the equals() method to compare two Ray objects for equality based
@@ -92,6 +84,21 @@ public class Ray {
 	 * @return the closest GeoPoint point to the beginning of the ray
 	 */
 	public GeoPoint findClosestGeoPoint(List<GeoPoint> points) {
+        if (points == null || points.isEmpty())
+            return null;
+        GeoPoint closest = null;
+        double minDistance = Double.MAX_VALUE;
+        for (GeoPoint p : points) {
+            double distance = p.point.distance(p0);
+            if (distance < minDistance) {
+                closest = p;
+                minDistance = distance;
+            }
+        }
+        return closest;
+    }
+	
+	/*public GeoPoint findClosestGeoPoint(List<GeoPoint> points) {
 		GeoPoint closestGeoPoint = null;
 		double minDistance = Double.POSITIVE_INFINITY;
 		for (GeoPoint item : points) {
@@ -102,5 +109,5 @@ public class Ray {
 			}
 		}
 		return closestGeoPoint;
-	}
+	}*/
 }
