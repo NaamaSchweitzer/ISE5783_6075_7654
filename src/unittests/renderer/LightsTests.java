@@ -162,7 +162,7 @@ public class LightsTests {
     @Test
     public void triangleWithMultipleLights() {
         scene2.geometries.add(triangle1, triangle2);
-        scene2.lights.add(new PointLight(trianglesLightColor, trianglesLightPosition).setkL(0.001).setkQ(0.0002)); // increasing the parameters to make a 'smaller' light  
+       // scene2.lights.add(new PointLight(trianglesLightColor, trianglesLightPosition).setkL(0.001).setkQ(0.0002)); // increasing the parameters to make a 'smaller' light  
         scene2.lights.add(new DirectionalLight(new Color(0,0,360), trianglesLightDirection)); //change trianglesLightColor to blue;
         scene2.lights.add(new SpotLight(trianglesLightColor, trianglesLightPosition, trianglesLightDirection).setkL(0.001).setkQ(0.001));
 
