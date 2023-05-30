@@ -1,9 +1,7 @@
 package geometries;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import primitives.Point;
 import primitives.Ray;
 
 public class Geometries extends Intersectable {

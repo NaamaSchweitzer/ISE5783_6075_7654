@@ -7,6 +7,7 @@ import lighting.LightSource;
 import primitives.Color;
 import primitives.Double3;
 import primitives.Material;
+import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 import scene.Scene;
@@ -14,8 +15,36 @@ import static primitives.Util.alignZero;
 
 public class RayTracerBasic extends RayTracerBase {
 
+	private static final double DELTA = 0.1; // constant for shadow rays
+
 	public RayTracerBasic(Scene scene) {
 		super(scene);
+	}
+
+	/**
+	 * function will check if point is unshaded
+	 *
+	 * @param gp - geometry point to check
+	 * @param l  - light vector
+	 * @param n  - normal vector
+	 * @return true if unshaded
+	 */
+	private boolean unshaded(GeoPoint gp, Vector l, Vector n, LightSource lightSource, double nv) {
+		Vector lightDirection = l.scale(-1); // from point to light source
+		Vector deltaVector = n.scale(nv < 0 ? DELTA : -DELTA);
+		Point point = gp.point.add(deltaVector);
+		Ray lightRay = new Ray(point, lightDirection);
+		List<GeoPoint> intersections = scene.geometries.findGeoIntersections(lightRay);
+
+		if (intersections != null) {
+			double distance = lightSource.getDistance(gp.point);
+			for (GeoPoint intersection : intersections) {
+				if (intersection.point.distance(gp.point) < distance)
+					return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -52,11 +81,13 @@ public class RayTracerBasic extends RayTracerBase {
 		for (LightSource lightSource : scene.lights) {
 			Vector lightVector = lightSource.getL(gp.point);
 			double nl = alignZero(normal.dotProduct(lightVector));
-			if (nl * nv > 0) {
-				Color lightIntensity = lightSource.getIntensity(gp.point);
-				color = color.add(lightIntensity.scale(calcDiffusive(material, nl)),
-						lightIntensity.scale(calcSpecular(material, normal, lightVector, nl, vector)));
-			}
+			if (nl * nv > 0) // sign(nl) == sing(nv)
+				if (unshaded(gp, lightVector, normal, lightSource, nv)) {
+
+					Color lightIntensity = lightSource.getIntensity(gp.point);
+					color = color.add(lightIntensity.scale(calcDiffusive(material, nl)),
+							lightIntensity.scale(calcSpecular(material, normal, lightVector, nl, vector)));
+				}
 		}
 		return color;
 	}
