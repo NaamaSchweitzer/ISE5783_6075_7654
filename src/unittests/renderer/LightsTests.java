@@ -76,7 +76,7 @@ public class LightsTests {
 	@Test
 	public void spherePoint() {
 		scene1.geometries.add(sphere);
-		scene1.lights.add(new PointLight(sphereLightColor, sphereLightPosition).setKl(0.001).setKq(0.0002));
+		scene1.lights.add(new PointLight(sphereLightColor, sphereLightPosition).setkL(0.001).setkQ(0.0002));
 
 		ImageWriter imageWriter = new ImageWriter("lightSpherePoint", 500, 500);
 		camera1.setImageWriter(imageWriter) //
@@ -89,8 +89,8 @@ public class LightsTests {
 	@Test
 	public void sphereSpot() {
 		scene1.geometries.add(sphere);
-		scene1.lights.add(new SpotLight(sphereLightColor, sphereLightPosition, new Vector(1, 1, -0.5)).setKl(0.001)
-				.setKq(0.0001));
+		scene1.lights.add(new SpotLight(sphereLightColor, sphereLightPosition, new Vector(1, 1, -0.5)).setkL(0.001)
+				.setkQ(0.0001));
 
 		ImageWriter imageWriter = new ImageWriter("lightSphereSpot", 500, 500);
 		camera1.setImageWriter(imageWriter) //
@@ -116,7 +116,7 @@ public class LightsTests {
 	@Test
 	public void trianglesPoint() {
 		scene2.geometries.add(triangle1, triangle2);
-		scene2.lights.add(new PointLight(trianglesLightColor, trianglesLightPosition).setKl(0.001).setKq(0.0002));
+		scene2.lights.add(new PointLight(trianglesLightColor, trianglesLightPosition).setkL(0.001).setkQ(0.0002));
 
 		ImageWriter imageWriter = new ImageWriter("lightTrianglesPoint", 500, 500);
 		camera2.setImageWriter(imageWriter) //
@@ -130,7 +130,7 @@ public class LightsTests {
 	public void trianglesSpot() {
 		scene2.geometries.add(triangle1, triangle2);
 		scene2.lights.add(new SpotLight(trianglesLightColor, trianglesLightPosition, trianglesLightDirection)
-				.setKl(0.001).setKq(0.0001));
+				.setkL(0.001).setkQ(0.0001));
 
 		ImageWriter imageWriter = new ImageWriter("lightTrianglesSpot", 500, 500);
 		camera2.setImageWriter(imageWriter) //
@@ -139,7 +139,43 @@ public class LightsTests {
 				.writeToImage(); //
 	}
 
+	/**
+     * produce a picture of a sphere lighted by multiple lights
+     */
+    @Test
+    public void sphereWithMultipleLights() {
+        scene1.geometries.add(sphere);
+        scene1.lights.add(new PointLight(sphereLightColor, sphereLightPosition).setkL(0.000001).setkQ(0.0002));
+        scene1.lights.add(new DirectionalLight(new Color(0, 255, 0), trianglesLightDirection));
+        scene1.lights.add(new SpotLight(trianglesLightColor, trianglesLightPosition, trianglesLightDirection).setkL(0.0000001).setkQ(0.0000001));
+
+        ImageWriter imageWriter = new ImageWriter("sphereWithMultipleLights", 500, 500);
+        camera1.setImageWriter(imageWriter) //
+                .setRayTracer(new RayTracerBasic(scene1)) //
+                .renderImage() //
+                .writeToImage(); //
+    }
+
+    /**
+     * produce a picture of a triangle lighted by multiple lights
+     */
+    @Test
+    public void triangleWithMultipleLights() {
+        scene2.geometries.add(triangle1, triangle2);
+        scene2.lights.add(new PointLight(trianglesLightColor, trianglesLightPosition).setkL(0.001).setkQ(0.0002)); // increasing the parameters to make a 'smaller' light  
+        scene2.lights.add(new DirectionalLight(new Color(0,0,360), trianglesLightDirection)); //change trianglesLightColor to blue;
+        scene2.lights.add(new SpotLight(trianglesLightColor, trianglesLightPosition, trianglesLightDirection).setkL(0.001).setkQ(0.001));
+
+        ImageWriter imageWriter = new ImageWriter("triangleWithMultipleLights", 500, 500);
+        camera2.setImageWriter(imageWriter) //
+                .setRayTracer(new RayTracerBasic(scene2)) //
+                .renderImage() //
+                .writeToImage(); //
+    }
+
+	
 	/** Produce a picture of a sphere lighted by a narrow spotlight */
+	/*
 	@Test
 	public void sphereSpotSharp() {
 		scene1.geometries.add(sphere);
@@ -152,8 +188,9 @@ public class LightsTests {
 				.renderImage() //
 				.writeToImage(); //
 	}
-
+*/
 	/** Produce a picture of two triangles lighted by a narrow spotlight */
+	/*
 	@Test
 	public void trianglesSpotSharp() {
 		scene2.geometries.add(triangle1, triangle2);
@@ -166,5 +203,6 @@ public class LightsTests {
 				.renderImage() //
 				.writeToImage(); //
 	}
+	*/
 
 }

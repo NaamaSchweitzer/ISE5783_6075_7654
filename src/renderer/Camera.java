@@ -189,7 +189,7 @@ public class Camera {
 	/**
 	 * This function checks if all the parameters are valid for the camera
 	 */
-	public void renderImage() {
+	public Camera renderImage() {
 		if (p0 == null)
 			throw new MissingResourceException("ERROR: The camera position is null", "Camera", "p0");
 		if (vUp == null)
@@ -217,7 +217,7 @@ public class Camera {
 				Color color = this.castRay(nx, ny, j, i);
 				imageWriter.writePixel(j, i, color);
 			}
-		;
+		return this;
 	}
 
 	/**
