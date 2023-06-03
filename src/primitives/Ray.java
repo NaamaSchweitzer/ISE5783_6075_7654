@@ -6,6 +6,7 @@ import java.util.Objects;
 import geometries.Intersectable.GeoPoint;
 
 public class Ray {
+
 	final private Point p0; // Private field for the starting point of the ray
 	final private Vector dir; // Private field for the direction of the ray
 
@@ -27,7 +28,6 @@ public class Ray {
 	public String toString() {
 		return "Ray [p0=" + p0 + ", dir=" + dir + "]";
 	}
-
 
 	/**
 	 * Override of the equals() method to compare two Ray objects for equality based
@@ -77,37 +77,25 @@ public class Ray {
 	}
 
 	/**
-	 * this function return the close {@link GeoPoint} point to the beginning of the
-	 * ray
+	 * This function return the closet point to the beginning of the ray
 	 * 
 	 * @param list of GeoPoint points
 	 * @return the closest GeoPoint point to the beginning of the ray
 	 */
 	public GeoPoint findClosestGeoPoint(List<GeoPoint> points) {
-        if (points == null || points.isEmpty())
-            return null;
-        GeoPoint closest = null;
-        double minDistance = Double.MAX_VALUE;
-        for (GeoPoint p : points) {
-            double distance = p.point.distance(p0);
-            if (distance < minDistance) {
-                closest = p;
-                minDistance = distance;
-            }
-        }
-        return closest;
-    }
-	
-	/*public GeoPoint findClosestGeoPoint(List<GeoPoint> points) {
-		GeoPoint closestGeoPoint = null;
-		double minDistance = Double.POSITIVE_INFINITY;
-		for (GeoPoint item : points) {
-			double distance = item.point.distance(p0);
+		if (points == null || points.isEmpty())
+			return null;
+		GeoPoint closest = null;
+		double minDistance = Double.MAX_VALUE;
+		for (GeoPoint p : points) {
+			double distance = p.point.distance(p0);
 			if (distance < minDistance) {
+				closest = p;
 				minDistance = distance;
-				closestGeoPoint = item;
 			}
 		}
-		return closestGeoPoint;
-	}*/
+		return closest;
+	}
+
+	
 }
