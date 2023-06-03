@@ -188,10 +188,10 @@ public class RayTracerBasic extends RayTracerBase {
 	 * @return the reflected ray
 	 */
 	private Ray constructReflectionRay(GeoPoint geoPoint, Vector normal, Vector vector) {
-		Vector deltaVector = n.scale(nv < 0 ? DELTA : -DELTA);
-		Point point = gp.point.add(deltaVector);
+		Vector deltaVector = normal.scale(normal.dotProduct(vector) < 0 ? DELTA : -DELTA);
+		Point point = geoPoint.point.add(deltaVector);
 		Vector reflectedVector = vector.subtract(normal.scale(2 * vector.dotProduct(normal)));
-		return new Ray(geoPoint.point, reflectedVector);
+		return new Ray(point, reflectedVector);
 	}
 
 	/**
@@ -204,7 +204,9 @@ public class RayTracerBasic extends RayTracerBase {
 	 * @return the refracted ray
 	 */
 	private Ray constructRefractionRay(GeoPoint geoPoint, Vector normal, Vector vector) {
-		return new Ray(geoPoint.point, vector);
+		Vector deltaVector = normal.scale(normal.dotProduct(vector) < 0 ? DELTA : -DELTA);
+		Point point = geoPoint.point.add(deltaVector);
+		return new Ray(point, vector);
 	}
 
 	/**
