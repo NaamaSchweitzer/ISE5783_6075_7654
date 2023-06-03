@@ -22,7 +22,7 @@ import static primitives.Util.isZero;
  */
 public class RayTracerBasic extends RayTracerBase {
 
-	//private static final double DELTA = 0.1; // constant for shadow rays
+	// private static final double DELTA = 0.1; // constant for shadow rays
 	private static final int MAX_CALC_COLOR_LEVEL = 10;
 	private static final double MIN_CALC_COLOR_K = 0.001;
 	private static final Double3 INITIAL_K = Double3.ONE;
@@ -222,7 +222,7 @@ public class RayTracerBasic extends RayTracerBase {
 		Color color = calcLocalEffects(gp, ray, k);
 		return 1 == level ? color : color.add(calcGlobalEffects(gp, ray, level, k));
 	}
-	
+
 	/**
 	 * boolean function to check if point is unshaded
 	 * 
@@ -235,7 +235,7 @@ public class RayTracerBasic extends RayTracerBase {
 	 */
 	private boolean unshaded(GeoPoint gp, Vector l, Vector n, LightSource lightSource) {
 		Vector lightDirection = l.scale(-1); // from point to light source
-		Ray lightRay = new Ray(gp.point, lightDirection,n);
+		Ray lightRay = new Ray(gp.point, lightDirection, n);
 		List<GeoPoint> intersections = scene.geometries.findGeoIntersections(lightRay);
 		if (intersections != null) {
 			double distance = lightSource.getDistance(gp.point);
@@ -250,37 +250,35 @@ public class RayTracerBasic extends RayTracerBase {
 	}
 
 	/**
-     * The function checks transparency shading between a {@link GeoPoint} point and
-     * the light source.
-     * For each intersection which is closer to the
-     * point than the light source multiply ktr by {@link Material#kT} of its
-     * geometry.
-     * The returned value is the transparency value between 1 (no Shaded at all) and
-     * 0 (full shaded).
-     * 
-     * @param gp a {@link GeoPoint} point on a geometry
-     * @param ls is the checked light source
-     * @param l  the light {@link Vector} direction
-     * @param n  the normal of the geometry
-     * @return the transparency value of the point
-     */
-    private Double3 transparency(GeoPoint geoPoint, LightSource ls, Vector l, Vector n) {
-        Vector lightDirection = l.scale(-1);
-        double lightDistance = ls.getDistance(geoPoint.point);
-        var intersections = scene.geometries.findGeoIntersections(new Ray(geoPoint.point, lightDirection, n));
-        if (intersections == null)
-            return Double3.ONE;
+	 * The function checks transparency shading between a {@link GeoPoint} point and
+	 * the light source. For each intersection which is closer to the point than the
+	 * light source multiply ktr by {@link Material#kT} of its geometry. The
+	 * returned value is the transparency value between 1 (no Shaded at all) and 0
+	 * (full shaded).
+	 * 
+	 * @param gp a {@link GeoPoint} point on a geometry
+	 * @param ls is the checked light source
+	 * @param l  the light {@link Vector} direction
+	 * @param n  the normal of the geometry
+	 * @return the transparency value of the point
+	 */
+	private Double3 transparency(GeoPoint geoPoint, LightSource ls, Vector l, Vector n) {
+		Vector lightDirection = l.scale(-1);
+		double lightDistance = ls.getDistance(geoPoint.point);
+		var intersections = scene.geometries.findGeoIntersections(new Ray(geoPoint.point, lightDirection, n));
+		if (intersections == null)
+			return Double3.ONE;
 
-        var ktr = Double3.ONE;
-        for (GeoPoint gp : intersections) {
-            if (alignZero(gp.point.distance(geoPoint.point) - lightDistance) <= 0) {
-                ktr = ktr.product(gp.geometry.getMaterial().kT);
-                if (ktr.lowerThan(MIN_CALC_COLOR_K)) {
-                    return Double3.ZERO;
-                }
-            }
-        }
-        return ktr;
-    }
+		var ktr = Double3.ONE;
+		for (GeoPoint gp : intersections) {
+			if (alignZero(gp.point.distance(geoPoint.point) - lightDistance) <= 0) {
+				ktr = ktr.product(gp.geometry.getMaterial().kT);
+				if (ktr.lowerThan(MIN_CALC_COLOR_K)) {
+					return Double3.ZERO;
+				}
+			}
+		}
+		return ktr;
+	}
 
 }
