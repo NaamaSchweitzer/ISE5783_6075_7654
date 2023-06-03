@@ -254,14 +254,18 @@ public class RayTracerBasic extends RayTracerBase {
 		Ray lightRay = new Ray(gp.point, lightDirection,n);
 		List<GeoPoint> intersections = scene.geometries.findGeoIntersections(lightRay);
 		if (intersections != null) {
+			Double3 ktr = Double3.ONE;
 			double distance = ls.getDistance(gp.point);
 			for (GeoPoint intersection : intersections) {
 				if (intersection.point.distance(gp.point) < distance
 						&& gp.geometry.getMaterial().kT.equals(Double3.ZERO))
-					return false;
+					return Double3.ZERO;
+				else {
+					ktr.product(gp.geometry.getMaterial().kT);
+				}
 			}
 		}
 
-		return true;
+		return Double3.ONE;
 	}
 }
