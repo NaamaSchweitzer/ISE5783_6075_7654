@@ -9,6 +9,7 @@ public class Ray {
 
 	final private Point p0; // Private field for the starting point of the ray
 	final private Vector dir; // Private field for the direction of the ray
+    private static final double DELTA = 0.1;
 
 	/**
 	 * Constructor that takes a Point object for the starting point of the ray and a
@@ -19,6 +20,19 @@ public class Ray {
 		dir = vec.normalize(); // normalize the direction vector
 		p0 = p; // set the starting point of the ray
 	}
+	
+	/**
+     * Constructor that moves the ray by DELTA
+     * @param p0 point
+     * @param direction direction (must be normalized)
+     * @param normal normal
+     */
+    public Ray(Point p0, Vector direction, Vector normal) {
+        Vector delta = normal.scale(normal.dotProduct(direction) > 0 ? DELTA : - DELTA);
+        this.p0 = p0.add(delta);
+        this.dir = direction;
+    }
+
 
 	/**
 	 * Override of the toString() method to return a string representation of the
