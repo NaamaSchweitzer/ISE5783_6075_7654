@@ -9,7 +9,7 @@ public class Ray {
 
 	final private Point p0; // Private field for the starting point of the ray
 	final private Vector dir; // Private field for the direction of the ray
-    private static final double DELTA = 0.1;
+	private static final double DELTA = 0.1; // constant for shadow rays
 
 	/**
 	 * Constructor that takes a Point object for the starting point of the ray and a
