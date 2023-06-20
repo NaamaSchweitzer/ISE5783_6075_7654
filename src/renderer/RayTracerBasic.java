@@ -15,38 +15,36 @@ import primitives.Vector;
 import scene.Scene;
 
 /**
- * The class extends RayTracerBase. Find the intersections of ray with
- * the scene objects and returns the color of the intersections.
+ * The class extends RayTracerBase. Find the intersections of ray with the scene
+ * objects and returns the color of the intersections.
  * 
  * @author Naama and Hadas
  */
 public class RayTracerBasic extends RayTracerBase {
 
-	
-    /**
-     * constant value of max recursive level of transparency calculation
-     */
+	/**
+	 * constant value of max recursive level of transparency calculation
+	 */
 	private static final int MAX_CALC_COLOR_LEVEL = 10;
-    
+
 	/**
-     * stop condition of the recursive transparency calculation,
-     * when the attenuation coefficient is very small.
-     * (the max recursive level of reflection).
-     */
+	 * stop condition of the recursive transparency calculation, when the
+	 * attenuation coefficient is very small. (the max recursive level of
+	 * reflection).
+	 */
 	private static final double MIN_CALC_COLOR_K = 0.001;
-	
+
 	/**
-     * constant attenuation value, initialized for max transparency of shading-rays
-     * calculation
-     * (1, means no attenuation)
-     */
+	 * constant attenuation value, initialized for max transparency of shading-rays
+	 * calculation (1, means no attenuation)
+	 */
 	private static final Double3 INITIAL_K = Double3.ONE;
 
-    /**
-     * RayTracerBase constructor, using scene parameter
-     * 
-     * @param the scene that contain the traced ray
-     */
+	/**
+	 * RayTracerBase constructor, using scene parameter
+	 * 
+	 * @param the scene that contain the traced ray
+	 */
 	public RayTracerBasic(Scene scene) {
 		super(scene);
 	}
@@ -62,6 +60,22 @@ public class RayTracerBasic extends RayTracerBase {
 	public Color traceRay(Ray ray) {
 		GeoPoint closestPoint = findClosestIntersection(ray);
 		return closestPoint == null ? scene.background : calcColor(closestPoint, ray);
+	}
+
+	/**
+	 * function that traces rays and return average color of pixel 
+	 * @param rays - rays to trace
+	 * @return
+	 */
+	@Override
+	public Color traceRays(List<Ray> rays) {
+
+		Color color = Color.BLACK;
+		for (Ray ray : rays) {
+			color = color.add(traceRay(ray));
+		}
+		return color.reduce(rays.size());
+
 	}
 
 	/**

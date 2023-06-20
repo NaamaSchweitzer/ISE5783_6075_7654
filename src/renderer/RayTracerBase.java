@@ -3,6 +3,8 @@
  */
 package renderer;
 
+import java.util.List;
+
 import primitives.Color;
 import primitives.Ray;
 import scene.Scene;
@@ -32,5 +34,11 @@ public abstract class RayTracerBase {
 	 * @return the color of the intersection
 	 */
 	abstract Color traceRay(Ray ray);
+	
+	/**
+     * function that traces rays and return average color of pixel
+     * @param rays rays to trace
+     */
+    abstract Color traceRays(List<Ray> rays);
 
 }

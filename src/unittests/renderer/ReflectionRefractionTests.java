@@ -62,8 +62,8 @@ public class ReflectionRefractionTests {
 						.setMaterial(new Material().setKr(1)),
 				new Triangle(new Point(1500, -1500, -1500), new Point(-1500, 1500, -1500),
 						new Point(-1500, -1500, -2000)) //
-								.setEmission(new Color(20, 20, 20)) //
-								.setMaterial(new Material().setKr(new Double3(0.5, 0, 0.4))));
+						.setEmission(new Color(20, 20, 20)) //
+						.setMaterial(new Material().setKr(new Double3(0.5, 0, 0.4))));
 
 		scene.lights.add(new SpotLight(new Color(1020, 400, 400), new Point(-750, -750, -150), new Vector(-1, -1, -4)) //
 				.setkL(0.00001).setkQ(0.000005));
@@ -174,10 +174,10 @@ public class ReflectionRefractionTests {
 						.setMaterial(new Material().setKd(0.6).setKs(0.9).setShininess(1000).setKt(0.15).setKr(0)),
 
 				// balloons
-				new Sphere(36, new Point(-95, 70, -120)) // the center sphere- baloon
+				new Sphere(36, new Point(-95, 70, -120)) // the center sphere- balloon
 						.setEmission(new Color(255, 0, 0)) //
 						.setMaterial(new Material().setKd(0).setKs(0.2).setShininess(1000).setKt(0.6).setKr(0.2)),
-				new Sphere(20, new Point(-95, 70, -120)) // the center sphere- baloon
+				new Sphere(20, new Point(-95, 70, -120)) // the center sphere- balloon
 						.setEmission(new Color(0, 100, 100))
 						.setMaterial(new Material().setKd(0.6).setKs(0.9).setShininess(1000).setKt(0).setKr(1)),
 				new Triangle(new Point(-70, 42, 95), new Point(-67, 42, 115), new Point(-40, -17, 130))
@@ -203,6 +203,6 @@ public class ReflectionRefractionTests {
 				.writeToImage();
 
 	}
-
+	
 
 }

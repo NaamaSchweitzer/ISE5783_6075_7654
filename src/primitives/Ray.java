@@ -1,7 +1,9 @@
 package primitives;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import static primitives.Util.isZero;
 
 import geometries.Intersectable.GeoPoint;
 
@@ -110,6 +112,5 @@ public class Ray {
 		}
 		return closest;
 	}
-
 	
 }
