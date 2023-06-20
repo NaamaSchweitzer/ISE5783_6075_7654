@@ -215,7 +215,7 @@ public class RayTracerBasic extends RayTracerBase {
 	/**
 	 * The function calculates the color of point on a geometry as it seems from the
 	 * camera position, with consideration of the ambient-light and the transparency
-	 * of the object. The final color is combination of the material color and the
+	 * of the object. The final color is a combination of the material color and the
 	 * attributes of the object, the ambient-light color, the distance from the
 	 * camera and sometimes other object in the scene.
 	 * 
