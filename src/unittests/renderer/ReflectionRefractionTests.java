@@ -108,11 +108,11 @@ public class ReflectionRefractionTests {
 	 * produce a picture of a teddy bear holding a balloon that has another balloon
 	 * in it, sitting on a reflected floor
 	 */
-	@Test // in the test we made teddy bear that reflected on floor with a balloon in
-			// balloon.
+	@Test 
 	public void TeddyBear() {
 		Camera camera = new Camera(new Point(0, 0, 1700), new Vector(0, 0, -1), new Vector(0, 1, 0)) //
-				.setVPSize(150, 150).setVPDistance(1000);
+				.setVPSize(150, 150).setVPDistance(1000)
+				.setAntiAliasingFactor(5);
 
 		scene.geometries.add(
 				// ears
@@ -201,8 +201,9 @@ public class ReflectionRefractionTests {
 				.setRayTracer(new RayTracerBasic(scene)) //
 				.renderImage() //
 				.writeToImage();
-
 	}
+	
+	
 	
 
 }

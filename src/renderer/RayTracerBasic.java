@@ -63,7 +63,7 @@ public class RayTracerBasic extends RayTracerBase {
 	}
 
 	/**
-	 * function that traces rays and return average color of pixel 
+	 * The function traces rays and return average color of pixel 
 	 * @param rays - rays to trace
 	 * @return
 	 */
