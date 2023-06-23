@@ -141,4 +141,16 @@ public class Color {
 	public String toString() {
 		return "rgb:" + rgb;
 	}
+	
+	 /**
+     * Checks if the color is almost equal
+     * @param color primitives
+     * @return
+     */
+    public  boolean isAlmostEquals(primitives.Color color) {
+
+        return  (Math.abs(this.rgb.d1-color.rgb.d1)<= 2) &&
+                (Math.abs(this.rgb.d2-color.rgb.d2)<= 2) &&
+                (Math.abs(this.rgb.d3-color.rgb.d3)<= 2);
+    }
 }

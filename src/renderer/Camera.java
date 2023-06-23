@@ -1,16 +1,16 @@
 package renderer;
 
+import static primitives.Util.isZero;
+import static primitives.Util.alignZero;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.MissingResourceException;
+
 import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
-import static primitives.Util.isZero;
-import static primitives.Util.alignZero;
-
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.MissingResourceException;
 
 public class Camera {
 
@@ -29,6 +29,11 @@ public class Camera {
 
 	// --------- field Anti Aliasing -------
 	private int antiAliasingFactor = 1;
+
+	private boolean adaptive = true;
+	private int threadsCount = 1;
+    private double printInterval;
+
 
 	/**
 	 * 
@@ -160,6 +165,54 @@ public class Camera {
 		return this;
 	}
 
+	/**
+	 * set the adaptive
+	 *
+	 * @return the Camera object
+	 */
+	public Camera setadaptive(boolean adaptive) {
+		this.adaptive = adaptive;
+		return this;
+	}
+
+	/**
+	 * set the threadsCount
+	 *
+	 * @return the Camera object
+	 */
+	public Camera setthreadsCount(int threadsCount) {
+		this.threadsCount = threadsCount;
+		return this;
+	}
+	
+	/**
+     * Set multi threading functionality for accelerating the rendering speed.
+     * Initialize the number of threads.
+     * The defaultive value is 0 (no threads).
+     * The recommended value for the multithreading is 3.
+     *
+     * @param threads, the threads amount
+     * @return This Camera object
+     */
+    public Camera setMultithreading(int threads) {
+        if (threads < 0)
+            throw new IllegalArgumentException("threads parameter must be 0 or higher");
+        if (threads != 0)
+            this.threadsCount = threads;
+        return this;
+    }
+    
+    /**
+     * The setter initialize rendering-progress printing time interval in seconds
+     *
+     * @param interval - the interval of printing
+     * @return This Camera object
+     */
+    public Camera setDebugPrint(double printInterval) {
+        this.printInterval = printInterval;
+        return this;
+    }
+
 
 	/**
 	 * function that calculates the pixels location
@@ -210,23 +263,25 @@ public class Camera {
 	 * @return Ray
 	 */
 	public List<Ray> constructRays(int nX, int nY, int j, int i) {
-		  List<Ray> rays = new LinkedList<>();
-	        Point centralPixel = findPixelLocation(nX, nY, j, i);
-	        double rY = height / nY / antiAliasingFactor;
-	        double rX = width / nX / antiAliasingFactor;
-	        double x, y;
+		List<Ray> rays = new LinkedList<>();
+		Point centralPixel = findPixelLocation(nX, nY, j, i);
+		double rY = height / nY / antiAliasingFactor;
+		double rX = width / nX / antiAliasingFactor;
+		double x, y;
 
-	        for (int rowNumber = 0; rowNumber < antiAliasingFactor; rowNumber++) {
-	            for (int colNumber = 0; colNumber < antiAliasingFactor; colNumber++) {
-	                y = -(rowNumber - (antiAliasingFactor - 1d) / 2) * rY;
-	                x = (colNumber - (antiAliasingFactor - 1d) / 2) * rX;
-	                Point pIJ = centralPixel;
-	                if (y != 0) pIJ = pIJ.add(vUp.scale(y));
-	                if (x != 0) pIJ = pIJ.add(vRight.scale(x));
-	                rays.add(new Ray(p0, pIJ.subtract(p0)));
-	            }
-	        }
-	        return rays;
+		for (int rowNumber = 0; rowNumber < antiAliasingFactor; rowNumber++) {
+			for (int colNumber = 0; colNumber < antiAliasingFactor; colNumber++) {
+				y = -(rowNumber - (antiAliasingFactor - 1d) / 2) * rY;
+				x = (colNumber - (antiAliasingFactor - 1d) / 2) * rX;
+				Point pIJ = centralPixel;
+				if (y != 0)
+					pIJ = pIJ.add(vUp.scale(y));
+				if (x != 0)
+					pIJ = pIJ.add(vRight.scale(x));
+				rays.add(new Ray(p0, pIJ.subtract(p0)));
+			}
+		}
+		return rays;
 	}
 
 	/**
@@ -255,11 +310,29 @@ public class Camera {
 
 		int ny = imageWriter.getNy();
 		int nx = imageWriter.getNx();
-		for (int j = 0; j < nx; j++)
-			for (int i = 0; i < ny; i++) {
-				Color color = this.castRay(nx, ny, j, i);
-				imageWriter.writePixel(j, i, color);
+
+		PixelManager pixelManager = new PixelManager(ny, nx, printInterval);
+
+		if (!adaptive) {
+			while (threadsCount-- > 0) {
+				PixelManager.Pixel pixel;
+				while ((pixel = pixelManager.nextPixel()) != null) {
+					Color color = this.castRay(nx, ny, pixel.col(), pixel.row());
+					imageWriter.writePixel(pixel.col(), pixel.row(), color);
+					pixelManager.pixelDone();
+				}
 			}
+		} else {
+			while (threadsCount-- > 0) {
+				PixelManager.Pixel pixel;
+				while ((pixel = pixelManager.nextPixel()) != null) {
+					imageWriter.writePixel(pixel.col(), pixel.row(),
+							AdaptiveSuperSampling(nx, ny, pixel.col(), pixel.row(), antiAliasingFactor));
+					pixelManager.pixelDone();
+				}
+			}
+		}
+
 		return this;
 	}
 
@@ -306,6 +379,55 @@ public class Camera {
 			return rayTracerBase.traceRay(constructRay(nX, nY, col, row));
 		else
 			return rayTracerBase.traceRays(constructRays(nX, nY, col, row));
+	}
+
+	/**
+	 * Checks the color of the pixel with the help of individual rays and averages
+	 * between them and only if necessary continues to send beams of rays in
+	 * recursion
+	 * 
+	 * @param nX        Pixel length
+	 * @param nY        Pixel width
+	 * @param j         The position of the pixel relative to the y-axis
+	 * @param i         The position of the pixel relative to the x-axis
+	 * @param numOfRays The amount of rays sent
+	 * @return Pixel color
+	 */
+	private Color AdaptiveSuperSampling(int nX, int nY, int j, int i, int numOfRays) {
+		Vector Vright = vRight;
+		Vector Vup = vUp;
+		Point cameraLoc = this.getP0();
+		int numOfRaysInRowCol = (int) Math.floor(Math.sqrt(numOfRays));
+		if (numOfRaysInRowCol == 1)
+			return rayTracerBase.traceRay(constructRayThroughPixel(nX, nY, j, i));
+
+		Point pIJ = this.findPixelLocation(nX, nY, j, i);
+
+		double rY = alignZero(height / nY);
+		// the ratio Rx = w/Nx, the width of the pixel
+		double rX = alignZero(width / nX);
+
+		double PRy = rY / numOfRaysInRowCol;
+		double PRx = rX / numOfRaysInRowCol;
+		return rayTracerBase.AdaptiveSuperSamplingRec(pIJ, rX, rY, PRx, PRy, cameraLoc, Vright, Vup, null);
+	}
+
+	/**
+	 * construct ray through a pixel in the view plane nX and nY create the
+	 * resolution
+	 *
+	 * @param nX number of pixels in the width of the view plane
+	 * @param nY number of pixels in the height of the view plane
+	 * @param j  index row in the view plane
+	 * @param i  index column in the view plane
+	 * @return ray that goes through the pixel (j, i) Ray(p0, Vi,j)
+	 */
+	public Ray constructRayThroughPixel(int nX, int nY, int j, int i) {
+		Point pIJ = findPixelLocation(nX, nY, j, i); // center point of the pixel
+
+		// Vi,j = Pi,j - P0, the direction of the ray to the pixel(j, i)
+		Vector vIJ = pIJ.subtract(p0);
+		return new Ray(p0, vIJ);
 	}
 
 }
